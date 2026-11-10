@@ -22,13 +22,13 @@ function render(){
   const html=ranked.filter(([r])=>(r.name+" "+r.mode+" "+r.org).toLowerCase().includes(q)).map(([r,n])=>`<tr class="${n<=3?"top3":""}">
     <td class="rank">${String(n).padStart(2,"0")}</td>
     <td><span class="model">${esc(r.name)}</span> <span class="mode">· ${esc(r.mode)}</span>${r.a?`<button type="button" class="tested" aria-expanded="${open.has(key(r))}" data-key="${esc(key(r))}" title="${esc(tip(r))}">tested</button>${open.has(key(r))?`<span class="tdetail">${esc(tip(r))}</span>`:""}`:""}</td>
-    <td class="kind"><i class="dot ${r.type}"></i>${esc(r.org)}</td>
+    <td class="kind hide-sm"><i class="dot ${r.type}"></i>${esc(r.org)}</td>
     <td class="num hide-sm">${rel(r.name)}</td>
-    <td class="num">${params(r.name)}</td>
+    <td class="num hide-sm">${params(r.name)}</td>
     <td class="iq">${r.iq}</td>
     <td class="barcell hide-sm"><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(r.type)}"></i></div></td>
-    <td class="num">${r.aa}</td>
-    <td class="src"><a href="${aaUrl(r.name)}" target="_blank" rel="noopener">Artificial Analysis</a>${r.a?`<a href="${TA}" target="_blank" rel="noopener" title="${esc(tip(r))}">TrackingAI</a>`:""}</td></tr>`).join("");
+    <td class="num hide-sm">${r.aa}</td>
+    <td class="src hide-sm"><a href="${aaUrl(r.name)}" target="_blank" rel="noopener" title="Artificial Analysis model page">Benchmark ↗</a>${r.a?`<a href="${TA}" target="_blank" rel="noopener" title="${esc(tip(r))}">TrackingAI ↗</a>`:""}</td></tr>`).join("");
   document.getElementById("rows").innerHTML=html||`<tr><td colspan="9" class="empty">No model or mode matches “${esc(q)}”. Clear the search to see all entries.</td></tr>`;
 }
 document.getElementById("rows").onclick=e=>{const b=e.target.closest("button.tested");if(!b)return;const k=b.dataset.key;open.has(k)?open.delete(k):open.add(k);render();document.querySelector(`button.tested[data-key="${CSS.escape(k)}"]`)?.focus()};

@@ -27,7 +27,7 @@
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;background:radial-gradient(1200px 600px at 75% -10%,var(--glow),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;background-color:var(--bg);color:var(--fg);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
 a{color:var(--gold)}
-.wrap{max-width:1120px;margin:0 auto;padding-block:56px 80px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:grid;gap:72px}
+.wrap{max-width:1240px;grid-template-columns:minmax(0,1fr);margin:0 auto;padding-block:56px 80px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:grid;gap:72px}
 .eyebrow{font:500 .72rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.02;text-wrap:balance;letter-spacing:-.01em}
 h1{font-size:clamp(3rem,9vw,6.5rem)}
@@ -60,7 +60,7 @@ section{display:grid;gap:24px;min-width:0}
 
 .board{border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th,td{padding:13px 16px;text-align:left;white-space:nowrap}
+th,td{padding:12px 14px;text-align:left;white-space:nowrap}
 thead th{font:500 .68rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
 tbody tr{border-top:1px solid var(--line);transition:background .15s}
 tbody tr:first-child{border-top:0}
@@ -112,7 +112,11 @@ button.tested{background:none;font-family:var(--mono)}
 .method li b{color:var(--fg)}
 code{font-family:var(--mono);font-size:.88em;color:var(--fg)}
 footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 24px}
-@media (max-width:720px){.podium{grid-template-columns:1fr}.method{grid-template-columns:1fr}.hide-sm{display:none}}
+@media (max-width:720px){.podium{grid-template-columns:1fr;gap:8px}
+  .pod{grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:16px;row-gap:2px;padding:14px 16px;align-items:center}
+  .pod .rk{grid-column:1/-1}.pod .score{grid-row:2/4;font-size:2.6rem}.pod .nm,.pod .md{grid-column:2}
+  .wrap{gap:48px;padding-block:32px 56px}
+  th,td{padding:10px}td:nth-child(2){white-space:normal}.rank{width:32px}.method{grid-template-columns:1fr}.hide-sm{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -143,7 +147,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       </div>
     </div>
     <div class="board"><table>
-      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">IQ scale</th><th aria-sort="none" data-sort="aa"><button type="button" class="sortbtn" title="Artificial Analysis Intelligence Index, 0 to 100">Benchmark<span class="arr" aria-hidden="true"></span></button></th><th>Sources</th></tr></thead>
+      <thead><tr><th>#</th><th>Model · thinking mode</th><th class="hide-sm">Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th class="hide-sm" aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">IQ scale</th><th class="hide-sm" aria-sort="none" data-sort="aa"><button type="button" class="sortbtn" title="Artificial Analysis Intelligence Index, 0 to 100">Benchmark<span class="arr" aria-hidden="true"></span></button></th><th class="hide-sm">Sources</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
   </section>
@@ -180,6 +184,6 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
 </div>
 
 <script src="data.js?v=bd94bd9e" defer></script>
-<script src="app.js?v=4e54439f" defer></script>
+<script src="app.js?v=32c3f1f2" defer></script>
 </body>
 </html>
