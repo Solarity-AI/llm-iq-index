@@ -10,6 +10,8 @@
 <meta name="description" content="Estimated IQ scores for the top 10 closed and top 10 open-weight LLMs across every thinking mode, with sources and method.">
 <meta property="og:title" content="LLM IQ Index">
 <meta property="og:description" content="One IQ number for every frontier LLM and every thinking mode, with sources, updated every 3 hours.">
+<link rel="preload" href="fonts/InstrumentSerif-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Manrope-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css?v=e509ef3d">
 <style>
 /* Layout: observatory readout — serif headline, top-3 podium, tabbed ranked tables (overall/closed/open), model cards last, method footer */
@@ -134,7 +136,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
 
   <section aria-labelledby="h-top">
     <div class="eyebrow" id="h-top">Top three models</div>
-    <div class="podium" id="podium"></div>
+    <div class="podium" id="podium"><div class="pod" aria-hidden="true"><span class="rk">&nbsp;</span><span class="score">&nbsp;</span><span class="nm">&nbsp;</span><span class="md">&nbsp;</span></div><div class="pod" aria-hidden="true"><span class="rk">&nbsp;</span><span class="score">&nbsp;</span><span class="nm">&nbsp;</span><span class="md">&nbsp;</span></div><div class="pod" aria-hidden="true"><span class="rk">&nbsp;</span><span class="score">&nbsp;</span><span class="nm">&nbsp;</span><span class="md">&nbsp;</span></div></div>
   </section>
 
   <section aria-labelledby="h-board">
