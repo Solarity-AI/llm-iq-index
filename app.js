@@ -1,3 +1,4 @@
+if(typeof rows==="undefined"){const m="The score data did not load. Reload the page; if this keeps happening, the site is being updated.";for(const id of ["rows"])document.getElementById(id).innerHTML=`<tr><td colspan="9" class="empty" role="alert">${m}</td></tr>`;throw new Error("data.js missing")}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const col=t=>t==="open"?"var(--open)":"var(--closed)";
 const pct=iq=>Math.max(2,Math.min(100,(iq-100)/45*100));
