@@ -23,7 +23,7 @@ ${META.join(",\n")}
 };
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const rel=n=>{const [y,m]=META[n][1].split("-");return MON[m-1]+" "+y};
-const params=n=>{const [,,t,a,d]=META[n];if(!t)return \`<span class="est" title="Not yet known">n/a</span>\`;return d?\`\${t}\${a?\` <span class="sub">\${a} active</span>\`:\` <span class="sub">dense</span>\`}\`:\`\${t} <span class="est" title="Not disclosed by the lab. Estimate from price, speed and tier relative to open models of known size.">est.</span>\`};
+const params=n=>{const [,,t,a,d]=META[n];if(!t)return \`<span class="est" title="The lab has not published a parameter count yet">Not published yet</span>\`;return d?\`\${t}\${a?\` <span class="sub">\${a} active</span>\`:\` <span class="sub">dense</span>\`}\`:\`\${t} <span class="est" title="Not disclosed by the lab. Estimate from price, speed and tier relative to open models of known size.">est.</span>\`};
 const aaUrl=n=>"https://artificialanalysis.ai/models/"+META[n][0];
 const TA="https://www.trackingai.org/home";
 // [name, org, type, [[mode, AA index v5]], {mode:[offlineIQ, mensaIQ, TrackingAI label]}]
