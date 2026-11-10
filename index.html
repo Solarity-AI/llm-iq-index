@@ -114,7 +114,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
   </header>
 
   <section aria-labelledby="h-top">
-    <div class="eyebrow" id="h-top">Top of the index</div>
+    <div class="eyebrow" id="h-top">Top three models</div>
     <div class="podium" id="podium"></div>
   </section>
 
@@ -203,7 +203,7 @@ const byType={all:rows,closed:rows.filter(r=>r.type==="closed"),open:rows.filter
 for(const k in byType)document.getElementById("n-"+k).textContent=byType[k].length;
 document.getElementById("m-n").textContent=rows.length;
 
-document.getElementById("podium").innerHTML=rows.slice(0,3).map((r,i)=>`<div class="pod"><span class="rk">No. ${i+1}</span><span class="score">${r.iq}</span><span class="nm"><i class="dot ${r.type}"></i>${esc(r.name)}</span><span class="md">${esc(r.mode)} mode · AA index ${r.aa}</span></div>`).join("");
+document.getElementById("podium").innerHTML=rows.filter((r,i)=>rows.findIndex(x=>x.name===r.name)===i).slice(0,3).map((r,i)=>`<div class="pod"><span class="rk">No. ${i+1}</span><span class="score">${r.iq}</span><span class="nm"><i class="dot ${r.type}"></i>${esc(r.name)}</span><span class="md">${esc(r.mode)} mode · AA index ${r.aa}</span></div>`).join("");
 
 let tab="all";
 function render(){
