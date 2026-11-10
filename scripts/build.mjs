@@ -44,7 +44,7 @@ const topModels=n=>rows.filter((r,i)=>rows.findIndex(x=>x.name===r.name)===i).sl
 writeFileSync(new URL("data.js", root), js);
 
 // Cache-busting: a visitor must never get a new page with an old script.
-const v = p => createHash("sha256").update(read(p)).digest("hex").slice(0, 8);
+const v = p => createHash("sha256").update(read(p).replaceAll("\r\n", "\n")).digest("hex").slice(0, 8);
 let html = read("index.html");
 for (const f of ["data.js", "app.js", "fonts.css"]) {
   html = html.replace(new RegExp(`(["'])${f.replace(".", "\\.")}(\\?v=[0-9a-f]+)?\\1`, "g"), `$1${f}?v=${v(f)}$1`);
