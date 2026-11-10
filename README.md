@@ -24,16 +24,16 @@ Curated by hand in `data/models.json`: parameter counts for new models, Tracking
 
 ## Develop
 
-Requires Node 20 or later; no dependencies.
+Requires Node 22 or later (see `.nvmrc`); no dependencies to install.
 
-```bash
-npm test
-```
+| Command | What it does |
+| --- | --- |
+| `npm start` | Serves the site at http://localhost:8080 (set `PORT` to change it) |
+| `npm test` | Runs the test suite |
+| `npm run build` | Regenerates `data.js` from `data/models.json` and stamps asset versions |
+| `npm run check` | What CI runs: build, tests, and a check that generated files are committed |
+| `npm run update` | Refreshes scores from Artificial Analysis (needs `AA_API_KEY`) |
 
-```bash
-npm run build
-```
-
-Open `index.html` in a browser to view the page.
+After editing `data/models.json`, run `npm run build` and commit the regenerated files.
 
 Data: Artificial Analysis (attribution required by their API terms) and TrackingAI.
