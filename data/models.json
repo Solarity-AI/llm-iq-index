@@ -1,0 +1,637 @@
+{
+ "updated": "2026-11-10T13:00:00Z",
+ "source": "manual snapshot of artificialanalysis.ai leaderboard",
+ "aaIndexVersion": "5",
+ "models": [
+  {
+   "name": "Claude Fable 5.2",
+   "org": "Anthropic",
+   "type": "closed",
+   "aaNames": [
+    "Claude Fable 5.2"
+   ],
+   "aaSlug": "claude-fable-5-2",
+   "released": "2026-11",
+   "params": {
+    "total": "~5T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 65
+    },
+    {
+     "mode": "xhigh",
+     "aa": 62
+    },
+    {
+     "mode": "high",
+     "aa": 62
+    },
+    {
+     "mode": "medium",
+     "aa": 56
+    },
+    {
+     "mode": "low",
+     "aa": 54
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Gemini 4 Carbon",
+   "org": "Google",
+   "type": "closed",
+   "aaNames": [
+    "Gemini 4 Carbon"
+   ],
+   "aaSlug": "gemini-4-carbon",
+   "released": "2026-10",
+   "params": {
+    "total": "~3T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "high",
+     "aa": 60
+    },
+    {
+     "mode": "medium",
+     "aa": 58
+    },
+    {
+     "mode": "low",
+     "aa": 54
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Claude Opus 5.5",
+   "org": "Anthropic",
+   "type": "closed",
+   "aaNames": [
+    "Claude Opus 5.5"
+   ],
+   "aaSlug": "claude-opus-5-5",
+   "released": "2026-09",
+   "params": {
+    "total": "~3T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 59
+    },
+    {
+     "mode": "xhigh",
+     "aa": 57
+    },
+    {
+     "mode": "high",
+     "aa": 52
+    },
+    {
+     "mode": "medium",
+     "aa": 48
+    },
+    {
+     "mode": "low",
+     "aa": 35
+    }
+   ],
+   "trackingai": {
+    "max": {
+     "offline": 134,
+     "mensa": 148,
+     "label": "Claude-5.5 Opus MAX"
+    },
+    "high": {
+     "offline": 127,
+     "mensa": 142,
+     "label": "Claude-5.5 Opus"
+    }
+   }
+  },
+  {
+   "name": "GPT-6 Astra",
+   "org": "OpenAI",
+   "type": "closed",
+   "aaNames": [
+    "GPT-6 Astra"
+   ],
+   "aaSlug": "gpt-6-astra",
+   "released": "2026-09",
+   "params": {
+    "total": "~3T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 57
+    },
+    {
+     "mode": "xhigh",
+     "aa": 55
+    },
+    {
+     "mode": "high",
+     "aa": 55
+    },
+    {
+     "mode": "medium",
+     "aa": 52
+    },
+    {
+     "mode": "low",
+     "aa": 43
+    }
+   ],
+   "trackingai": {
+    "max": {
+     "offline": 135,
+     "mensa": 147,
+     "label": "GPT 6 Astra Ultra"
+    }
+   }
+  },
+  {
+   "name": "GPT-6.1 Sol",
+   "org": "OpenAI",
+   "type": "closed",
+   "aaNames": [
+    "GPT-6.1 Sol"
+   ],
+   "aaSlug": "gpt-6-1-sol",
+   "released": "2026-09",
+   "params": {
+    "total": "~1T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 55
+    },
+    {
+     "mode": "xhigh",
+     "aa": 52
+    },
+    {
+     "mode": "high",
+     "aa": 50
+    },
+    {
+     "mode": "medium",
+     "aa": 46
+    },
+    {
+     "mode": "low",
+     "aa": 35
+    }
+   ],
+   "trackingai": {
+    "max": {
+     "offline": 130,
+     "mensa": 139,
+     "label": "GPT 6.1 Sol Ultra"
+    }
+   }
+  },
+  {
+   "name": "Claude Sonnet 5.5",
+   "org": "Anthropic",
+   "type": "closed",
+   "aaNames": [
+    "Claude Sonnet 5.5"
+   ],
+   "aaSlug": "claude-sonnet-5-5",
+   "released": "2026-09",
+   "params": {
+    "total": "~1T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 55
+    },
+    {
+     "mode": "xhigh",
+     "aa": 50
+    },
+    {
+     "mode": "high",
+     "aa": 42
+    },
+    {
+     "mode": "medium",
+     "aa": 31
+    },
+    {
+     "mode": "low",
+     "aa": 26
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "GPT-6.1 Terra",
+   "org": "OpenAI",
+   "type": "closed",
+   "aaNames": [
+    "GPT-6.1 Terra"
+   ],
+   "aaSlug": "gpt-6-1-terra",
+   "released": "2026-10",
+   "params": {
+    "total": "~400B",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 51
+    },
+    {
+     "mode": "xhigh",
+     "aa": 45
+    },
+    {
+     "mode": "high",
+     "aa": 42
+    },
+    {
+     "mode": "medium",
+     "aa": 38
+    },
+    {
+     "mode": "non-reasoning",
+     "aa": 31
+    },
+    {
+     "mode": "low",
+     "aa": 29
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Muse Wonder",
+   "org": "Meta",
+   "type": "closed",
+   "aaNames": [
+    "Muse Wonder",
+    "Muse Wonder Full"
+   ],
+   "aaSlug": "muse-wonder",
+   "released": "2026-10",
+   "params": {
+    "total": "~2T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "Full max",
+     "aa": 50
+    },
+    {
+     "mode": "max",
+     "aa": 44
+    },
+    {
+     "mode": "high",
+     "aa": 41
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Grok 4.7",
+   "org": "SpaceXAI",
+   "type": "closed",
+   "aaNames": [
+    "Grok 4.7"
+   ],
+   "aaSlug": "grok-4-7",
+   "released": "2026-09",
+   "params": {
+    "total": "~3T",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "xhigh",
+     "aa": 35
+    },
+    {
+     "mode": "high",
+     "aa": 35
+    },
+    {
+     "mode": "low",
+     "aa": 31
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Gemini 3.8 Flash",
+   "org": "Google",
+   "type": "closed",
+   "aaNames": [
+    "Gemini 3.8 Flash"
+   ],
+   "aaSlug": "gemini-3-8-flash",
+   "released": "2026-09",
+   "params": {
+    "total": "~500B",
+    "active": null,
+    "disclosed": false
+   },
+   "modes": [
+    {
+     "mode": "high",
+     "aa": 31
+    },
+    {
+     "mode": "medium",
+     "aa": 30
+    },
+    {
+     "mode": "low",
+     "aa": 23
+    }
+   ],
+   "trackingai": {
+    "high": {
+     "offline": 130,
+     "mensa": 109,
+     "label": "Gemini 3.8 Flash"
+    }
+   }
+  },
+  {
+   "name": "Kimi K3.1 Pro",
+   "org": "Moonshot (Kimi)",
+   "type": "open",
+   "aaNames": [
+    "Kimi K3.1 Pro"
+   ],
+   "aaSlug": "kimi-k3-1-pro",
+   "released": "2026-10",
+   "params": {
+    "total": "2.8T",
+    "active": "104B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "thinking",
+     "aa": 46
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "DeepSeek V4.1 Flash",
+   "org": "DeepSeek",
+   "type": "open",
+   "aaNames": [
+    "DeepSeek V4.1 Flash 1017"
+   ],
+   "aaSlug": "deepseek-v4-1-flash-1017",
+   "released": "2026-10",
+   "params": {
+    "total": "552B",
+    "active": "16B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 33
+    },
+    {
+     "mode": "high",
+     "aa": 29
+    },
+    {
+     "mode": "non-reasoning",
+     "aa": 19
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "GLM-5.3",
+   "org": "Z AI",
+   "type": "open",
+   "aaNames": [
+    "GLM-5.3"
+   ],
+   "aaSlug": "glm-5-3",
+   "released": "2026-08",
+   "params": {
+    "total": "753B",
+    "active": "40B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 32
+    },
+    {
+     "mode": "low",
+     "aa": 23
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "MiMo-V2.6-Pro",
+   "org": "Xiaomi",
+   "type": "open",
+   "aaNames": [
+    "MiMo-V2.6-Pro"
+   ],
+   "aaSlug": "mimo-v2-6-pro",
+   "released": "2026-09",
+   "params": {
+    "total": "1T",
+    "active": "42B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "thinking",
+     "aa": 30
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "MiniMax-M3.1-Flash",
+   "org": "MiniMax",
+   "type": "open",
+   "aaNames": [
+    "MiniMax-M3.1-Flash"
+   ],
+   "aaSlug": "minimax-m3-1-flash",
+   "released": "2026-10",
+   "params": {
+    "total": "428B",
+    "active": "23B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "thinking",
+     "aa": 29
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Muse Spark Open",
+   "org": "Meta",
+   "type": "open",
+   "aaNames": [
+    "Muse Spark Open"
+   ],
+   "aaSlug": "muse-spark-open",
+   "released": "2026-10",
+   "params": {
+    "total": "816B",
+    "active": "42B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "xhigh",
+     "aa": 25
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "DeepSeek V4 Pro",
+   "org": "DeepSeek",
+   "type": "open",
+   "aaNames": [
+    "DeepSeek V4 Pro 0813"
+   ],
+   "aaSlug": "deepseek-v4-pro",
+   "released": "2026-08",
+   "params": {
+    "total": "1.6T",
+    "active": "49B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "max",
+     "aa": 23
+    },
+    {
+     "mode": "non-reasoning",
+     "aa": 13
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Qwen3.8 27B",
+   "org": "Alibaba",
+   "type": "open",
+   "aaNames": [
+    "Qwen3.8 27B"
+   ],
+   "aaSlug": "qwen3-8-27b",
+   "released": "2026-08",
+   "params": {
+    "total": "27B",
+    "active": null,
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "xhigh",
+     "aa": 20
+    },
+    {
+     "mode": "medium",
+     "aa": 17
+    },
+    {
+     "mode": "low",
+     "aa": 16
+    },
+    {
+     "mode": "non-reasoning",
+     "aa": 10
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "Nemotron 3 Ultra",
+   "org": "NVIDIA",
+   "type": "open",
+   "aaNames": [
+    "Nemotron 3 Ultra"
+   ],
+   "aaSlug": "nvidia-nemotron-3-ultra-550b-a55b",
+   "released": "2026-06",
+   "params": {
+    "total": "550B",
+    "active": "55B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "thinking",
+     "aa": 12
+    }
+   ],
+   "trackingai": {}
+  },
+  {
+   "name": "gpt-oss-120b",
+   "org": "OpenAI",
+   "type": "open",
+   "aaNames": [
+    "gpt-oss-120b"
+   ],
+   "aaSlug": "gpt-oss-120b",
+   "released": "2025-08",
+   "params": {
+    "total": "117B",
+    "active": "5.1B",
+    "disclosed": true
+   },
+   "modes": [
+    {
+     "mode": "high",
+     "aa": 4
+    }
+   ],
+   "trackingai": {}
+  }
+ ]
+}

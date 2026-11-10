@@ -43,3 +43,5 @@ function cards(type){
 }
 document.getElementById("closed").innerHTML=cards("closed");
 document.getElementById("open").innerHTML=cards("open");
+
+try{document.getElementById("upd").textContent=new Date(UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"UTC",timeZoneName:"short"})}catch(e){}
