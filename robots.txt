@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://solarity-ai.github.io/llm-iq-index/sitemap.xml
