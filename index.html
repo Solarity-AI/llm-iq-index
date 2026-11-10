@@ -21,8 +21,8 @@
   --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
   color-scheme:dark;
 }
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#8a6a2c;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}}
-:root[data-theme="light"]{--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#8a6a2c;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#6f5420;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}}
+:root[data-theme="light"]{--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#6f5420;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;background:radial-gradient(1200px 600px at 75% -10%,var(--glow),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;background-color:var(--bg);color:var(--fg);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
@@ -52,7 +52,7 @@ section{display:grid;gap:24px;min-width:0}
 .tabs{display:inline-flex;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--surface);gap:2px}
 .tabs button{font:600 .85rem var(--body);color:var(--muted);background:none;border:0;padding:8px 16px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
 .tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
-.tabs button .n{font:.7rem var(--mono);opacity:.6;margin-left:6px}
+.tabs button .n{font:.7rem var(--mono);margin-left:6px}
 .search{font:inherit;font-size:.9rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-width:0;flex:0 1 240px}
 .search::placeholder{color:var(--muted)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
@@ -84,10 +84,12 @@ tr.top3 .rank{color:var(--gold)}
 .sortbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
 th[aria-sort="descending"] .arr::after{content:"↓"}th[aria-sort="ascending"] .arr::after{content:"↑"}
 th[aria-sort="descending"],th[aria-sort="ascending"]{color:var(--fg)}
-button.tested{background:none;font-family:var(--mono)}
+button.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.tested{background:none;font-family:var(--mono)}
 .tdetail{display:block;font-size:.78rem;color:var(--muted);margin-top:4px;white-space:normal}
 .showbtn{all:unset;cursor:pointer;font-size:.8rem;color:var(--gold);border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);justify-self:start}
 .showbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .tested{font:500 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 5px;margin-left:8px;vertical-align:2px;cursor:help}
 .src a{font-size:.8rem;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);margin-right:10px}
 .src a:hover{border-color:var(--gold)}
@@ -104,6 +106,7 @@ button.tested{background:none;font-family:var(--mono)}
 .card .big{font:400 2.6rem/1 var(--display);font-variant-numeric:tabular-nums}
 .modes{display:grid;gap:5px}
 .mrow{display:grid;grid-template-columns:96px 1fr 30px;gap:10px;align-items:center;font:.75rem var(--mono);color:var(--muted)}
+.mrow [title]{color:var(--gold)}
 .mrow b{color:var(--fg);font-weight:500;text-align:right}
 .subh{display:flex;align-items:center;gap:10px;font:500 .72rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
@@ -139,14 +142,15 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       <h2 id="h-board">Leaderboards</h2>
       <div class="ctrl">
         <div class="tabs" role="tablist" aria-label="Leaderboard">
-          <button role="tab" id="t-all" aria-selected="true">Overall<span class="n" id="n-all"></span></button>
-          <button role="tab" id="t-closed" aria-selected="false">Closed<span class="n" id="n-closed"></span></button>
-          <button role="tab" id="t-open" aria-selected="false">Open weights<span class="n" id="n-open"></span></button>
+          <button role="tab" id="t-all" aria-selected="true" aria-controls="board" tabindex="0">Overall<span class="n" id="n-all"></span></button>
+          <button role="tab" id="t-closed" aria-selected="false" aria-controls="board" tabindex="-1">Closed<span class="n" id="n-closed"></span></button>
+          <button role="tab" id="t-open" aria-selected="false" aria-controls="board" tabindex="-1">Open weights<span class="n" id="n-open"></span></button>
         </div>
         <input class="search" id="q" type="search" placeholder="Search model or mode" aria-label="Search model or mode">
       </div>
     </div>
-    <div class="board"><table>
+    <p class="sr-only" id="status" role="status" aria-live="polite"></p>
+    <div class="board" id="board" role="tabpanel" aria-labelledby="t-all"><table>
       <thead><tr><th>#</th><th>Model · thinking mode</th><th class="hide-sm">Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th class="hide-sm" aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">IQ scale</th><th class="hide-sm" aria-sort="none" data-sort="aa"><button type="button" class="sortbtn" title="Artificial Analysis Intelligence Index, 0 to 100">Benchmark<span class="arr" aria-hidden="true"></span></button></th><th class="hide-sm">Sources</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
@@ -184,6 +188,6 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
 </div>
 
 <script src="data.js?v=bd94bd9e" defer></script>
-<script src="app.js?v=32c3f1f2" defer></script>
+<script src="app.js?v=2849a613" defer></script>
 </body>
 </html>
