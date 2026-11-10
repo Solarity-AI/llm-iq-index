@@ -1,8 +1,7 @@
-if(typeof rows==="undefined"){const m="The score data did not load. Reload the page; if this keeps happening, the site is being updated.";for(const id of ["rows"])document.getElementById(id).innerHTML=`<tr><td colspan="9" class="empty" role="alert">${m}</td></tr>`;throw new Error("data.js missing")}
+if(typeof rows==="undefined"){const m="The score data did not load. Reload the page; if this keeps happening, the site is being updated.";document.getElementById("rows").innerHTML=`<tr><td colspan="9" class="empty" role="alert">${m}</td></tr>`;throw new Error("data.js missing")}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const col=t=>t==="open"?"var(--open)":"var(--closed)";
 const pct=iq=>Math.max(2,Math.min(100,(iq-100)/45*100));
-const ptip=n=>META[n][4]?"Disclosed by the lab (open weights)":"Undisclosed; estimate";
 const tip=r=>r.a?`TrackingAI ${r.a[2]}: offline test ${r.a[0]} · Mensa Norway ${r.a[1]}`:"";
 const byType={all:rows,closed:rows.filter(r=>r.type==="closed"),open:rows.filter(r=>r.type==="open")};
 for(const k in byType)document.getElementById("n-"+k).textContent=byType[k].length;
@@ -28,7 +27,7 @@ function render(){
 }
 function setTab(t){
   tab=t;for(const k of ["all","closed","open"])document.getElementById("t-"+k).setAttribute("aria-selected",k===t);
-  try{history.replaceState(null,"",t==="all"?location.pathname:"#"+t)}catch(e){}
+  try{history.replaceState(null,"",t==="all"?location.pathname:"#"+t)}catch{}
   render();
 }
 for(const k of ["all","closed","open"])document.getElementById("t-"+k).onclick=()=>setTab(k);
@@ -45,4 +44,4 @@ function cards(type){
 document.getElementById("closed").innerHTML=cards("closed");
 document.getElementById("open").innerHTML=cards("open");
 
-try{document.getElementById("upd").textContent=new Date(UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"UTC",timeZoneName:"short"})}catch(e){}
+try{document.getElementById("upd").textContent=new Date(UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"UTC",timeZoneName:"short"})}catch{}
