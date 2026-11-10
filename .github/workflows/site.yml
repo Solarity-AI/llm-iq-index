@@ -1,0 +1,87 @@
+name: Site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 */3 * * *" # every 3 hours: new models show up the same day
+  workflow_dispatch:
+
+concurrency:
+  group: site-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test
+      - name: Generated files are up to date
+        run: npm run build && git diff --exit-code -- data.js index.html
+
+  refresh-and-deploy:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      - name: Refresh scores from Artificial Analysis
+        id: update
+        env:
+          AA_API_KEY: ${{ secrets.AA_API_KEY }}
+        run: |
+          npm run update --silent | tee update.log
+          echo "pending=$(grep '^PENDING: ' update.log | sed 's/^PENDING: //')" >> "$GITHUB_OUTPUT"
+
+      - run: npm run build --silent
+      - run: npm test
+
+      - name: Commit refreshed data
+        run: |
+          if git diff --quiet -- data/models.json data.js index.html; then echo "No data changes."; exit 0; fi
+          git config user.name "llm-iq-index bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/models.json data.js index.html
+          git commit -m "chore(data): refresh scores from Artificial Analysis"
+          git push
+
+      - name: Flag models that need classifying
+        if: steps.update.outputs.pending != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PENDING: ${{ steps.update.outputs.pending }}
+        run: |
+          title="New models need open/closed classification"
+          body="The data refresh found models it could not classify as open or closed: ${PENDING}. Add a rule in scripts/update-from-aa.mjs or set their type in data/models.json."
+          n=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+          if [ -n "$n" ]; then
+            gh issue view "$n" --json body,comments --jq '.body, .comments[].body' | grep -qF "$PENDING" || gh issue comment "$n" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+
+      - name: Collect site files
+        run: |
+          mkdir -p _site
+          cp index.html app.js data.js fonts.css _site/
+          cp -r fonts _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deploy
+        uses: actions/deploy-pages@v4

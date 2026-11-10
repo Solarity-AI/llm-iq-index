@@ -2,5 +2,9 @@
   "name": "llm-iq-index",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test tests/*.test.mjs" }
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "update": "node scripts/update-from-aa.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
 }
