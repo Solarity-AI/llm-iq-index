@@ -7,7 +7,7 @@ const byType={all:rows,closed:rows.filter(r=>r.type==="closed"),open:rows.filter
 for(const k in byType)document.getElementById("n-"+k).textContent=byType[k].length;
 document.getElementById("m-n").textContent=rows.length;
 
-document.getElementById("podium").innerHTML=topModels(3).map((r,i)=>`<div class="pod"><span class="rk">No. ${i+1}</span><span class="score">${r.iq}</span><span class="nm"><i class="dot ${r.type}"></i>${esc(r.name)}</span><span class="md">${esc(r.mode)} mode · AA index ${r.aa}</span></div>`).join("");
+document.getElementById("podium").innerHTML=topModels(3).map((r,i)=>`<div class="pod"><span class="rk">No. ${i+1}</span><span class="score">${r.iq}</span><span class="nm"><i class="dot ${r.type}"></i>${esc(r.name)}</span><span class="md">${esc(r.mode)} mode · benchmark ${r.aa}</span></div>`).join("");
 
 let tab="all",sortKey="iq",sortDir=-1;
 const open=new Set();
@@ -50,7 +50,7 @@ function cards(type){
   return M.filter(m=>m[2]===type).map(m=>{
     const rs=rows.filter(r=>r.name===m[0]);
     return `<article class="card"><div class="row"><div><div class="nm">${esc(m[0])}</div><div class="org">${esc(m[1])} · ${rel(m[0])} · ${params(m[0])}</div><div class="org">best mode: ${esc(rs[0].mode)}</div><button type="button" class="showbtn" data-model="${esc(m[0])}">Show in leaderboard</button></div><div class="big">${rs[0].iq}</div></div>
-    <div class="modes">${rs.map(r=>`<div class="mrow"><span>${esc(r.mode)}${r.a?" ◆":""}</span><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(type)}"></i></div><b>${r.iq}</b></div>`).join("")}</div></article>`;
+    <div class="modes">${rs.map(r=>`<div class="mrow"><span>${esc(r.mode)}${r.a?` <span title="Measured by TrackingAI" aria-label="measured by TrackingAI">◆</span>`:""}</span><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(type)}"></i></div><b>${r.iq}</b></div>`).join("")}</div></article>`;
   }).join("");
 }
 document.getElementById("closed").innerHTML=cards("closed");

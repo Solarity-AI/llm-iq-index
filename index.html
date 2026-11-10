@@ -9,7 +9,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Estimated IQ scores for the top 10 closed and top 10 open-weight LLMs across every thinking mode, with sources and method.">
 <meta property="og:title" content="LLM IQ Index">
-<meta property="og:description" content="One IQ number for every frontier LLM and every thinking mode. 60 entries, sourced.">
+<meta property="og:description" content="One IQ number for every frontier LLM and every thinking mode, with sources, updated every 3 hours.">
 <link rel="stylesheet" href="fonts.css?v=e509ef3d">
 <style>
 /* Layout: observatory readout — serif headline, top-3 podium, tabbed ranked tables (overall/closed/open), model cards last, method footer */
@@ -143,7 +143,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       </div>
     </div>
     <div class="board"><table>
-      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">100 — 145</th><th aria-sort="none" data-sort="aa"><button type="button" class="sortbtn">AA idx<span class="arr" aria-hidden="true"></span></button></th><th>Sources</th></tr></thead>
+      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">IQ scale</th><th aria-sort="none" data-sort="aa"><button type="button" class="sortbtn" title="Artificial Analysis Intelligence Index, 0 to 100">Benchmark<span class="arr" aria-hidden="true"></span></button></th><th>Sources</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
   </section>
@@ -151,7 +151,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
   <section aria-labelledby="h-models">
     <div class="sechead">
       <h2 id="h-models">The 20 models</h2>
-      <div class="legend"><span><i class="dot closed"></i>Closed</span><span><i class="dot open"></i>Open weights</span></div>
+      <div class="legend"><span><i class="dot closed"></i>Closed</span><span><i class="dot open"></i>Open weights</span><span>◆ Measured by TrackingAI</span></div>
     </div>
     <div class="subh"><i class="dot closed"></i>Closed models</div>
     <div class="cards" id="closed"></div>
@@ -179,7 +179,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
   </footer>
 </div>
 
-<script src="data.js?v=7b5c3168" defer></script>
-<script src="app.js?v=d458bad5" defer></script>
+<script src="data.js?v=bd94bd9e" defer></script>
+<script src="app.js?v=4e54439f" defer></script>
 </body>
 </html>
