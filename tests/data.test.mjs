@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-const js = readFileSync(new URL("../app.js", import.meta.url), "utf8");
+const js = readFileSync(new URL("../data.js", import.meta.url), "utf8");
 // Model rows look like: ["Name","Org","open"|"closed",[...modes],{...}]
 const models = [...js.matchAll(/^\["([^"]+)","[^"]+","(open|closed)"/gm)].map(m => ({ name: m[1], open: m[2] === "open" }));
 const meta = JSON.parse("{" + js.match(/const META=\{\n([\s\S]*?)\n\};/)[1] + "}");
