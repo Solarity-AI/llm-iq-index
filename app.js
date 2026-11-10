@@ -1,4 +1,32 @@
-const TA="https://www.trackingai.org/home", AA="https://artificialanalysis.ai/leaderboards/models";
+const TA="https://www.trackingai.org/home";
+// META: [AA model slug, release (month, per Artificial Analysis), total params, active params (MoE), params disclosed?]
+// Closed labs do not publish sizes: those are tier estimates, marked est.
+const META={
+"Claude Fable 5.2":["claude-fable-5-2","2026-11","~5T",null,0],
+"Gemini 4 Carbon":["gemini-4-carbon","2026-10","~3T",null,0],
+"Claude Opus 5.5":["claude-opus-5-5","2026-09","~3T",null,0],
+"GPT-6 Astra":["gpt-6-astra","2026-09","~3T",null,0],
+"GPT-6.1 Sol":["gpt-6-1-sol","2026-09","~1T",null,0],
+"Claude Sonnet 5.5":["claude-sonnet-5-5","2026-09","~1T",null,0],
+"GPT-6.1 Terra":["gpt-6-1-terra","2026-10","~400B",null,0],
+"Muse Wonder":["muse-wonder","2026-10","~2T",null,0],
+"Grok 4.7":["grok-4-7","2026-09","~3T",null,0],
+"Gemini 3.8 Flash":["gemini-3-8-flash","2026-09","~500B",null,0],
+"Kimi K3.1 Pro":["kimi-k3-1-pro","2026-10","2.8T","104B",1],
+"DeepSeek V4.1 Flash":["deepseek-v4-1-flash-1017","2026-10","552B","16B",1],
+"GLM-5.3":["glm-5-3","2026-08","753B","40B",1],
+"MiMo-V2.6-Pro":["mimo-v2-6-pro","2026-09","1T","42B",1],
+"MiniMax-M3.1-Flash":["minimax-m3-1-flash","2026-10","428B","23B",1],
+"Muse Spark Open":["muse-spark-open","2026-10","816B","42B",1],
+"DeepSeek V4 Pro":["deepseek-v4-pro","2026-08","1.6T","49B",1],
+"Qwen3.8 27B":["qwen3-8-27b","2026-08","27B",null,1],
+"Nemotron 3 Ultra":["nvidia-nemotron-3-ultra-550b-a55b","2026-06","550B","55B",1],
+"gpt-oss-120b":["gpt-oss-120b","2025-08","117B","5.1B",1]
+};
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const rel=n=>{const [y,m]=META[n][1].split("-");return MON[m-1]+" "+y};
+const params=n=>{const [,,t,a,d]=META[n];return d?`${t}${a?` <span class="sub">${a} active</span>`:` <span class="sub">dense</span>`}`:`${t} <span class="est" title="Not disclosed by the lab. Estimate from price, speed and tier relative to open models of known size.">est.</span>`};
+const aaUrl=n=>"https://artificialanalysis.ai/models/"+META[n][0];
 // [name, org, type, [[mode, AA index v5]], {mode:[offlineIQ, mensaIQ, TrackingAI label]}]
 const M=[
 ["Claude Fable 5.2","Anthropic","closed",[["max",65],["xhigh",62],["high",62],["medium",56],["low",54]],{}],
@@ -31,6 +59,7 @@ rows.sort((x,y)=>y.iq-x.iq||y.aa-x.aa);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const col=t=>t==="open"?"var(--open)":"var(--closed)";
 const pct=iq=>Math.max(2,Math.min(100,(iq-100)/45*100));
+const ptip=n=>META[n][4]?"Disclosed by the lab (open weights)":"Undisclosed; estimate";
 const tip=r=>r.a?`TrackingAI ${r.a[2]}: offline test ${r.a[0]} · Mensa Norway ${r.a[1]}`:"";
 const byType={all:rows,closed:rows.filter(r=>r.type==="closed"),open:rows.filter(r=>r.type==="open")};
 for(const k in byType)document.getElementById("n-"+k).textContent=byType[k].length;
@@ -45,12 +74,14 @@ function render(){
   const html=list.map((r,i)=>[r,i+1]).filter(([r])=>(r.name+" "+r.mode+" "+r.org).toLowerCase().includes(q)).map(([r,n])=>`<tr class="${n<=3?"top3":""}">
     <td class="rank">${String(n).padStart(2,"0")}</td>
     <td><span class="model">${esc(r.name)}</span> <span class="mode">· ${esc(r.mode)}</span>${r.a?`<span class="tested" title="${esc(tip(r))}">tested</span>`:""}</td>
-    <td class="kind hide-sm"><i class="dot ${r.type}"></i>${r.type==="open"?"Open":"Closed"}</td>
+    <td class="kind"><i class="dot ${r.type}"></i>${esc(r.org)}</td>
+    <td class="num hide-sm">${rel(r.name)}</td>
+    <td class="num">${params(r.name)}</td>
     <td class="iq">${r.iq}</td>
     <td class="barcell hide-sm"><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(r.type)}"></i></div></td>
     <td class="num">${r.aa}</td>
-    <td class="src"><a href="${AA}" target="_blank" rel="noopener">Artificial Analysis</a>${r.a?`<a href="${TA}" target="_blank" rel="noopener" title="${esc(tip(r))}">TrackingAI</a>`:""}</td></tr>`).join("");
-  document.getElementById("rows").innerHTML=html||`<tr><td colspan="7" class="empty">No model or mode matches “${esc(q)}”. Clear the search to see all entries.</td></tr>`;
+    <td class="src"><a href="${aaUrl(r.name)}" target="_blank" rel="noopener">Artificial Analysis</a>${r.a?`<a href="${TA}" target="_blank" rel="noopener" title="${esc(tip(r))}">TrackingAI</a>`:""}</td></tr>`).join("");
+  document.getElementById("rows").innerHTML=html||`<tr><td colspan="9" class="empty">No model or mode matches “${esc(q)}”. Clear the search to see all entries.</td></tr>`;
 }
 function setTab(t){
   tab=t;for(const k of ["all","closed","open"])document.getElementById("t-"+k).setAttribute("aria-selected",k===t);
@@ -64,7 +95,7 @@ const h=location.hash.slice(1);setTab(["closed","open"].includes(h)?h:"all");
 function cards(type){
   return M.filter(m=>m[2]===type).map(m=>{
     const rs=rows.filter(r=>r.name===m[0]);
-    return `<article class="card"><div class="row"><div><div class="nm">${esc(m[0])}</div><div class="org">${esc(m[1])} · best: ${esc(rs[0].mode)}</div></div><div class="big">${rs[0].iq}</div></div>
+    return `<article class="card"><div class="row"><div><div class="nm">${esc(m[0])}</div><div class="org">${esc(m[1])} · ${rel(m[0])} · ${params(m[0])}</div><div class="org">best mode: ${esc(rs[0].mode)}</div></div><div class="big">${rs[0].iq}</div></div>
     <div class="modes">${rs.map(r=>`<div class="mrow"><span>${esc(r.mode)}${r.a?" ◆":""}</span><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(type)}"></i></div><b>${r.iq}</b></div>`).join("")}</div></article>`;
   }).join("");
 }
