@@ -79,6 +79,15 @@ tr.top3 .rank{color:var(--gold)}
 .bar i{display:block;height:100%;border-radius:2px}
 .sub{font-size:.72rem;color:var(--muted);display:block;margin-top:2px}
 .est{font:500 .6rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);border-radius:4px;padding:0 4px;cursor:help}
+.sortbtn{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+.sortbtn:hover{color:var(--fg)}
+.sortbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:2px}
+th[aria-sort="descending"] .arr::after{content:"↓"}th[aria-sort="ascending"] .arr::after{content:"↑"}
+th[aria-sort="descending"],th[aria-sort="ascending"]{color:var(--fg)}
+button.tested{background:none;font-family:var(--mono)}
+.tdetail{display:block;font-size:.78rem;color:var(--muted);margin-top:4px;white-space:normal}
+.showbtn{all:unset;cursor:pointer;font-size:.8rem;color:var(--gold);border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);justify-self:start}
+.showbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .tested{font:500 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 5px;margin-left:8px;vertical-align:2px;cursor:help}
 .src a{font-size:.8rem;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);margin-right:10px}
 .src a:hover{border-color:var(--gold)}
@@ -134,7 +143,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       </div>
     </div>
     <div class="board"><table>
-      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm">Released</th><th>Params</th><th>IQ</th><th class="barcell hide-sm">100 — 145</th><th>AA idx</th><th>Sources</th></tr></thead>
+      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm" aria-sort="none" data-sort="rel"><button type="button" class="sortbtn">Released<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="none" data-sort="params"><button type="button" class="sortbtn">Params<span class="arr" aria-hidden="true"></span></button></th><th aria-sort="descending" data-sort="iq"><button type="button" class="sortbtn">IQ<span class="arr" aria-hidden="true"></span></button></th><th class="barcell hide-sm">100 — 145</th><th aria-sort="none" data-sort="aa"><button type="button" class="sortbtn">AA idx<span class="arr" aria-hidden="true"></span></button></th><th>Sources</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
   </section>
@@ -154,7 +163,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
     <div><div class="eyebrow">Method</div><h2 id="h-method" style="margin-top:10px">How a score is made</h2></div>
     <ol>
       <li><b>Benchmark mapping.</b> Each thinking mode's Artificial Analysis Intelligence Index (v5, 0–100) converts to IQ with <code>IQ = 100 + 0.6 × index</code>. The factor puts the strongest modes where TrackingAI's offline test measures them, around 130–135.</li>
-      <li><b>Direct IQ test.</b> Where TrackingAI tested that exact model and mode on its offline test, whose questions are never published, the final score averages the mapped number with the measured IQ. These rows carry a <span class="tested" style="margin:0">tested</span> mark; hover it for the raw results.</li>
+      <li><b>Direct IQ test.</b> Where TrackingAI tested that exact model and mode on its offline test, whose questions are never published, the final score averages the mapped number with the measured IQ. These rows carry a <span class="tested" style="margin:0">tested</span> mark; tap or click it to see the raw results.</li>
       <li><b>Why not Mensa Norway.</b> Top models nearly max out the public Mensa Norway test (147–148) and may have seen its questions in training. It appears only in tooltips.</li>
       <li><b>Release dates and sizes.</b> Release month and parameter counts come from each model's Artificial Analysis page. Open-weight labs publish their sizes (total, and active for mixture-of-experts models). Closed labs do not, so those sizes are marked <span class="est">est.</span>: rough tier estimates from each model's price and speed compared with open models of known size, accurate to a factor of about two at best.</li>
       <li><b>Kept current.</b> Scores refresh automatically every 3 hours from the Artificial Analysis API, so a new model appears the day it is benchmarked. Parameter counts for new models and TrackingAI test results are added by hand.</li>
@@ -171,6 +180,6 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
 </div>
 
 <script src="data.js?v=7b5c3168" defer></script>
-<script src="app.js?v=d2d9697b" defer></script>
+<script src="app.js?v=d458bad5" defer></script>
 </body>
 </html>
