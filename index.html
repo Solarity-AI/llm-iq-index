@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LLM IQ Index</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Estimated IQ scores for the top 10 closed and top 10 open-weight LLMs across every thinking mode, with sources and method.">
+<meta property="og:title" content="LLM IQ Index">
+<meta property="og:description" content="One IQ number for every frontier LLM and every thinking mode. 60 entries, sourced.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: observatory readout — serif headline, top-3 podium, tabbed ranked tables (overall/closed/open), model cards last, method footer */
+:root{
+  --bg:#0b0d14;--bg2:#11141e;--surface:rgba(255,255,255,.035);--fg:#ecebe6;--muted:#9a9cab;--line:rgba(255,255,255,.08);
+  --gold:#d8bf86;--gold2:#a8894e;--closed:#a99bff;--open:#5fdcb6;--track:rgba(255,255,255,.07);--glow:rgba(216,191,134,.14);
+  --display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#8a6a2c;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}}
+:root[data-theme="light"]{--bg:#f6f4ee;--bg2:#ece8de;--surface:rgba(255,255,255,.7);--fg:#16171d;--muted:#5d5f6b;--line:rgba(20,20,30,.1);--gold:#8a6a2c;--gold2:#b8975a;--closed:#5a45d6;--open:#0d8a68;--track:rgba(20,20,30,.08);--glow:rgba(168,137,78,.16);color-scheme:light}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:radial-gradient(1200px 600px at 75% -10%,var(--glow),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;background-color:var(--bg);color:var(--fg);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--gold)}
+.wrap{max-width:1120px;margin:0 auto;padding-block:56px 80px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:grid;gap:72px}
+.eyebrow{font:500 .72rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.02;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(3rem,9vw,6.5rem)}
+h1 em{color:var(--gold)}
+h2{font-size:clamp(2rem,4.5vw,2.9rem)}
+.lede{max-width:62ch;color:var(--muted);font-size:1.05rem;margin:18px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:28px;font:.78rem var(--mono);color:var(--muted)}
+.meta b{color:var(--fg);font-weight:500}
+section{display:grid;gap:24px;min-width:0}
+.sechead{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px}
+
+/* podium */
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pod{position:relative;padding:22px 22px 20px;border:1px solid var(--line);border-radius:18px;background:var(--surface);backdrop-filter:blur(8px);display:grid;gap:4px;overflow:hidden;min-width:0}
+.pod:first-child{border-color:color-mix(in srgb,var(--gold) 45%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 15%,transparent),0 30px 60px -30px var(--glow)}
+.pod .rk{font:500 .72rem var(--mono);letter-spacing:.14em;color:var(--gold)}
+.pod .score{font:400 clamp(3rem,7vw,4.4rem)/1 var(--display);font-variant-numeric:tabular-nums}
+.pod .nm{font-weight:600}
+.pod .md{font-size:.85rem;color:var(--muted)}
+
+/* tabs */
+.tabs{display:inline-flex;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--surface);gap:2px}
+.tabs button{font:600 .85rem var(--body);color:var(--muted);background:none;border:0;padding:8px 16px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.tabs button .n{font:.7rem var(--mono);opacity:.6;margin-left:6px}
+.search{font:inherit;font-size:.9rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-width:0;flex:0 1 240px}
+.search::placeholder{color:var(--muted)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.board{border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px 16px;text-align:left;white-space:nowrap}
+thead th{font:500 .68rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+tbody tr{border-top:1px solid var(--line);transition:background .15s}
+tbody tr:first-child{border-top:0}
+tbody tr:hover{background:color-mix(in srgb,var(--fg) 4%,transparent)}
+.rank{font:500 .85rem var(--mono);color:var(--muted);width:48px;font-variant-numeric:tabular-nums}
+tr.top3 .rank{color:var(--gold)}
+.model{font-weight:600}
+.mode{color:var(--muted);font-weight:400}
+.iq{font:400 1.6rem/1 var(--display);font-variant-numeric:tabular-nums}
+.num{font:.85rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.dot.closed{background:var(--closed)}.dot.open{background:var(--open)}
+.kind{font-size:.82rem;color:var(--muted)}
+.barcell{width:28%;min-width:150px}
+.bar{height:4px;border-radius:2px;background:var(--track);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:2px}
+.tested{font:500 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 5px;margin-left:8px;vertical-align:2px;cursor:help}
+.src a{font-size:.8rem;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);margin-right:10px}
+.src a:hover{border-color:var(--gold)}
+.empty{padding:24px;color:var(--muted)}
+
+/* cards */
+.legend{display:flex;gap:18px;font-size:.85rem;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:18px;display:grid;gap:10px;min-width:0;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gold) 35%,transparent)}
+.card .row{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.card .nm{font-weight:600;line-height:1.3}
+.card .org{font-size:.8rem;color:var(--muted)}
+.card .big{font:400 2.6rem/1 var(--display);font-variant-numeric:tabular-nums}
+.modes{display:grid;gap:5px}
+.mrow{display:grid;grid-template-columns:96px 1fr 30px;gap:10px;align-items:center;font:.75rem var(--mono);color:var(--muted)}
+.mrow b{color:var(--fg);font-weight:500;text-align:right}
+.subh{display:flex;align-items:center;gap:10px;font:500 .72rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.method{border-top:1px solid var(--line);padding-top:40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:32px}
+.method ol{margin:0;padding-left:20px;display:grid;gap:14px;color:var(--muted)}
+.method li b{color:var(--fg)}
+code{font-family:var(--mono);font-size:.88em;color:var(--fg)}
+footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 24px}
+@media (max-width:720px){.podium{grid-template-columns:1fr}.method{grid-template-columns:1fr}.hide-sm{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Edition · 10 November 2026</div>
+    <h1>The LLM <em>IQ</em> Index</h1>
+    <p class="lede">One IQ-style number for every frontier language model and every thinking mode it offers. Anchored on an unpublished human IQ test, extended with the leading independent benchmark. Every score links to its sources.</p>
+    <div class="meta"><span><b>20</b> models</span><span><b id="m-n">60</b> model × mode entries</span><span><b>10</b> closed · <b>10</b> open weights</span><span>Sources: TrackingAI · Artificial Analysis</span></div>
+  </header>
+
+  <section aria-labelledby="h-top">
+    <div class="eyebrow" id="h-top">Top of the index</div>
+    <div class="podium" id="podium"></div>
+  </section>
+
+  <section aria-labelledby="h-board">
+    <div class="sechead">
+      <h2 id="h-board">Leaderboards</h2>
+      <div class="ctrl">
+        <div class="tabs" role="tablist" aria-label="Leaderboard">
+          <button role="tab" id="t-all" aria-selected="true">Overall<span class="n" id="n-all"></span></button>
+          <button role="tab" id="t-closed" aria-selected="false">Closed<span class="n" id="n-closed"></span></button>
+          <button role="tab" id="t-open" aria-selected="false">Open weights<span class="n" id="n-open"></span></button>
+        </div>
+        <input class="search" id="q" type="search" placeholder="Search model or mode" aria-label="Search model or mode">
+      </div>
+    </div>
+    <div class="board"><table>
+      <thead><tr><th>#</th><th>Model · thinking mode</th><th class="hide-sm">Type</th><th>IQ</th><th class="barcell hide-sm">100 — 145</th><th>AA idx</th><th>Sources</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="h-models">
+    <div class="sechead">
+      <h2 id="h-models">The 20 models</h2>
+      <div class="legend"><span><i class="dot closed"></i>Closed</span><span><i class="dot open"></i>Open weights</span></div>
+    </div>
+    <div class="subh"><i class="dot closed"></i>Closed models</div>
+    <div class="cards" id="closed"></div>
+    <div class="subh"><i class="dot open"></i>Open-weight models</div>
+    <div class="cards" id="open"></div>
+  </section>
+
+  <section class="method" aria-labelledby="h-method">
+    <div><div class="eyebrow">Method</div><h2 id="h-method" style="margin-top:10px">How a score is made</h2></div>
+    <ol>
+      <li><b>Benchmark mapping.</b> Each thinking mode's Artificial Analysis Intelligence Index (v5, 0–100) converts to IQ with <code>IQ = 100 + 0.6 × index</code>. The factor puts the strongest modes where TrackingAI's offline test measures them, around 130–135.</li>
+      <li><b>Direct IQ test.</b> Where TrackingAI tested that exact model and mode on its offline test, whose questions are never published, the final score averages the mapped number with the measured IQ. These rows carry a <span class="tested" style="margin:0">tested</span> mark; hover it for the raw results.</li>
+      <li><b>Why not Mensa Norway.</b> Top models nearly max out the public Mensa Norway test (147–148) and may have seen its questions in training. It appears only in tooltips.</li>
+      <li><b>Read with care.</b> These are estimates of reasoning ability on an IQ-style scale, not psychometric IQ. Treat gaps of 2–3 points as noise. Kimi K3.1 Pro weights were announced but not yet released. Gemini 3.8 Flash's tested mode is matched to "high" as the closest fit.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Data: <a href="https://www.trackingai.org/home">TrackingAI.org</a> (offline test, updated 4 Nov 2026)</span>
+    <span><a href="https://artificialanalysis.ai/leaderboards/models">Artificial Analysis</a> Intelligence Index v5</span>
+    <span>Built by <a href="https://github.com/Solarity-AI/llm-iq-index">Solarity AI</a></span>
+  </footer>
+</div>
+
+<script>
+const TA="https://www.trackingai.org/home", AA="https://artificialanalysis.ai/leaderboards/models";
+// [name, org, type, [[mode, AA index v5]], {mode:[offlineIQ, mensaIQ, TrackingAI label]}]
+const M=[
+["Claude Fable 5.2","Anthropic","closed",[["max",65],["xhigh",62],["high",62],["medium",56],["low",54]],{}],
+["Gemini 4 Carbon","Google","closed",[["high",60],["medium",58],["low",54]],{}],
+["Claude Opus 5.5","Anthropic","closed",[["max",59],["xhigh",57],["high",52],["medium",48],["low",35]],{max:[134,148,"Claude-5.5 Opus MAX"],high:[127,142,"Claude-5.5 Opus"]}],
+["GPT-6 Astra","OpenAI","closed",[["max",57],["xhigh",55],["high",55],["medium",52],["low",43]],{max:[135,147,"GPT 6 Astra Ultra"]}],
+["GPT-6.1 Sol","OpenAI","closed",[["max",55],["xhigh",52],["high",50],["medium",46],["low",35]],{max:[130,139,"GPT 6.1 Sol Ultra"]}],
+["Claude Sonnet 5.5","Anthropic","closed",[["max",55],["xhigh",50],["high",42],["medium",31],["low",26]],{}],
+["GPT-6.1 Terra","OpenAI","closed",[["max",51],["xhigh",45],["high",42],["medium",38],["non-reasoning",31],["low",29]],{}],
+["Muse Wonder","Meta","closed",[["Full max",50],["max",44],["high",41]],{}],
+["Grok 4.7","SpaceXAI","closed",[["xhigh",35],["high",35],["low",31]],{}],
+["Gemini 3.8 Flash","Google","closed",[["high",31],["medium",30],["low",23]],{high:[130,109,"Gemini 3.8 Flash"]}],
+["Kimi K3.1 Pro","Moonshot (Kimi)","open",[["thinking",46]],{}],
+["DeepSeek V4.1 Flash","DeepSeek","open",[["max",33],["high",29],["non-reasoning",19]],{}],
+["GLM-5.3","Z AI","open",[["max",32],["low",23]],{}],
+["MiMo-V2.6-Pro","Xiaomi","open",[["thinking",30]],{}],
+["MiniMax-M3.1-Flash","MiniMax","open",[["thinking",29]],{}],
+["Muse Spark Open","Meta","open",[["xhigh",25]],{}],
+["DeepSeek V4 Pro","DeepSeek","open",[["max",23],["non-reasoning",13]],{}],
+["Qwen3.8 27B","Alibaba","open",[["xhigh",20],["medium",17],["low",16],["non-reasoning",10]],{}],
+["Nemotron 3 Ultra","NVIDIA","open",[["thinking",12]],{}],
+["gpt-oss-120b","OpenAI","open",[["high",4]],{}]
+];
+const rows=[];
+for(const [name,org,type,modes,anc] of M)for(const [mode,aa] of modes){
+  const a=anc[mode], est=100+0.6*aa;
+  rows.push({name,org,type,mode,aa,a,iq:Math.round(a?(est+a[0])/2:est)});
+}
+rows.sort((x,y)=>y.iq-x.iq||y.aa-x.aa);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const col=t=>t==="open"?"var(--open)":"var(--closed)";
+const pct=iq=>Math.max(2,Math.min(100,(iq-100)/45*100));
+const tip=r=>r.a?`TrackingAI ${r.a[2]}: offline test ${r.a[0]} · Mensa Norway ${r.a[1]}`:"";
+const byType={all:rows,closed:rows.filter(r=>r.type==="closed"),open:rows.filter(r=>r.type==="open")};
+for(const k in byType)document.getElementById("n-"+k).textContent=byType[k].length;
+document.getElementById("m-n").textContent=rows.length;
+
+document.getElementById("podium").innerHTML=rows.slice(0,3).map((r,i)=>`<div class="pod"><span class="rk">No. ${i+1}</span><span class="score">${r.iq}</span><span class="nm"><i class="dot ${r.type}"></i>${esc(r.name)}</span><span class="md">${esc(r.mode)} mode · AA index ${r.aa}</span></div>`).join("");
+
+let tab="all";
+function render(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const list=byType[tab];
+  const html=list.map((r,i)=>[r,i+1]).filter(([r])=>(r.name+" "+r.mode+" "+r.org).toLowerCase().includes(q)).map(([r,n])=>`<tr class="${n<=3?"top3":""}">
+    <td class="rank">${String(n).padStart(2,"0")}</td>
+    <td><span class="model">${esc(r.name)}</span> <span class="mode">· ${esc(r.mode)}</span>${r.a?`<span class="tested" title="${esc(tip(r))}">tested</span>`:""}</td>
+    <td class="kind hide-sm"><i class="dot ${r.type}"></i>${r.type==="open"?"Open":"Closed"}</td>
+    <td class="iq">${r.iq}</td>
+    <td class="barcell hide-sm"><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(r.type)}"></i></div></td>
+    <td class="num">${r.aa}</td>
+    <td class="src"><a href="${AA}" target="_blank" rel="noopener">Artificial Analysis</a>${r.a?`<a href="${TA}" target="_blank" rel="noopener" title="${esc(tip(r))}">TrackingAI</a>`:""}</td></tr>`).join("");
+  document.getElementById("rows").innerHTML=html||`<tr><td colspan="7" class="empty">No model or mode matches “${esc(q)}”. Clear the search to see all entries.</td></tr>`;
+}
+function setTab(t){
+  tab=t;for(const k of ["all","closed","open"])document.getElementById("t-"+k).setAttribute("aria-selected",k===t);
+  try{history.replaceState(null,"",t==="all"?location.pathname:"#"+t)}catch(e){}
+  render();
+}
+for(const k of ["all","closed","open"])document.getElementById("t-"+k).onclick=()=>setTab(k);
+document.getElementById("q").oninput=render;
+const h=location.hash.slice(1);setTab(["closed","open"].includes(h)?h:"all");
+
+function cards(type){
+  return M.filter(m=>m[2]===type).map(m=>{
+    const rs=rows.filter(r=>r.name===m[0]);
+    return `<article class="card"><div class="row"><div><div class="nm">${esc(m[0])}</div><div class="org">${esc(m[1])} · best: ${esc(rs[0].mode)}</div></div><div class="big">${rs[0].iq}</div></div>
+    <div class="modes">${rs.map(r=>`<div class="mrow"><span>${esc(r.mode)}${r.a?" ◆":""}</span><div class="bar"><i style="width:${pct(r.iq)}%;background:${col(type)}"></i></div><b>${r.iq}</b></div>`).join("")}</div></article>`;
+  }).join("");
+}
+document.getElementById("closed").innerHTML=cards("closed");
+document.getElementById("open").innerHTML=cards("open");
+</script>
+</body>
+</html>
