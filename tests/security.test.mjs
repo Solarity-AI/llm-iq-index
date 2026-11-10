@@ -17,3 +17,7 @@ test("no inline <script> blocks remain", () => {
 test("page sets a referrer policy", () => {
   assert.match(html, /<meta name="referrer" content="strict-origin-when-cross-origin">/);
 });
+
+test("header shows when the data was last updated (regression #18)", () => {
+  assert.match(html, /<span id="upd">/);
+});

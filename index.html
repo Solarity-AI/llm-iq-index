@@ -110,7 +110,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Edition · 10 November 2026</div>
+    <div class="eyebrow">Live · data updated <span id="upd">10 Nov 2026</span></div>
     <h1>The LLM <em>IQ</em> Index</h1>
     <p class="lede">One IQ-style number for every frontier language model and every thinking mode it offers. Anchored on an unpublished human IQ test, extended with the leading independent benchmark. Every score links to its sources.</p>
     <div class="meta"><span><b>20</b> models</span><span><b id="m-n">60</b> model × mode entries</span><span><b>10</b> closed · <b>10</b> open weights</span><span>Sources: TrackingAI · Artificial Analysis</span></div>
@@ -157,6 +157,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       <li><b>Direct IQ test.</b> Where TrackingAI tested that exact model and mode on its offline test, whose questions are never published, the final score averages the mapped number with the measured IQ. These rows carry a <span class="tested" style="margin:0">tested</span> mark; hover it for the raw results.</li>
       <li><b>Why not Mensa Norway.</b> Top models nearly max out the public Mensa Norway test (147–148) and may have seen its questions in training. It appears only in tooltips.</li>
       <li><b>Release dates and sizes.</b> Release month and parameter counts come from each model's Artificial Analysis page. Open-weight labs publish their sizes (total, and active for mixture-of-experts models). Closed labs do not, so those sizes are marked <span class="est">est.</span>: rough tier estimates from each model's price and speed compared with open models of known size, accurate to a factor of about two at best.</li>
+      <li><b>Kept current.</b> Scores refresh automatically every 3 hours from the Artificial Analysis API, so a new model appears the day it is benchmarked. Parameter counts for new models and TrackingAI test results are added by hand.</li>
       <li><b>Read with care.</b> These are estimates of reasoning ability on an IQ-style scale, not psychometric IQ. Treat gaps of 2–3 points as noise. Kimi K3.1 Pro weights were announced but not yet released. Gemini 3.8 Flash's tested mode is matched to "high" as the closest fit.</li>
     </ol>
   </section>
