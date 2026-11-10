@@ -72,25 +72,53 @@ export function merge(db, apiRows, now) {
   return { db: { ...db, models, updated: now, source: "Artificial Analysis Data API (free tier)" }, added, pending };
 }
 
-async function fetchAll(key) {
+/** Fetches every page. Retries 429 and 5xx up to 3 times with backoff (GET is idempotent). */
+export async function fetchAll(key, { fetchFn = fetch, sleep = ms => new Promise(r => setTimeout(r, ms)) } = {}) {
   const rows = [];
+  let version = null;
   for (let page = 1; page < 50; page++) {
-    const res = await fetch(`${API}?page=${page}`, { headers: { "x-api-key": key }, signal: AbortSignal.timeout(30000) });
+    let res;
+    for (let attempt = 0; ; attempt++) {
+      res = await fetchFn(`${API}?page=${page}`, { headers: { "x-api-key": key }, signal: AbortSignal.timeout(30000) });
+      if (res.ok || attempt === 3 || !(res.status === 429 || res.status >= 500)) break;
+      const wait = Number(res.headers?.get?.("retry-after")) * 1000 || 2000 * 2 ** attempt;
+      await sleep(Math.min(wait, 60000));
+    }
     if (!res.ok) throw new Error(`Artificial Analysis API returned ${res.status} on page ${page}`);
     const body = await res.json();
+    if (!Array.isArray(body.data)) throw new Error(`Unexpected response shape on page ${page}`);
+    version ??= body.intelligence_index_version ?? null;
     rows.push(...body.data);
     if (!body.pagination?.has_more) break;
   }
-  return rows;
+  return { rows, version };
+}
+
+/**
+ * Refuses updates that would publish nonsense: too few models, a new major
+ * Intelligence Index version (scores not comparable), or most known scores
+ * jumping at once. Returns a reason string, or null when safe.
+ */
+export function sanityCheck(db, next, rows, version) {
+  if (rows.length < 20) return `only ${rows.length} models returned`;
+  const major = v => String(v ?? "").split(".")[0];
+  if (version != null && db.aaIndexVersion && major(version) !== major(db.aaIndexVersion))
+    return `Intelligence Index changed from v${db.aaIndexVersion} to v${version}: the IQ formula needs recalibrating`;
+  const before = new Map(db.models.map(m => [m.name, Math.max(...m.modes.map(x => x.aa))]));
+  const known = next.models.filter(m => before.has(m.name));
+  const jumped = known.filter(m => Math.abs(Math.max(...m.modes.map(x => x.aa)) - before.get(m.name)) > 15);
+  if (known.length >= 5 && jumped.length > known.length / 2) return `${jumped.length} of ${known.length} models moved more than 15 points`;
+  return null;
 }
 
 if (process.argv[1]?.replaceAll("\\", "/").endsWith("scripts/update-from-aa.mjs")) {
   const key = process.env.AA_API_KEY;
   if (!key) { console.log("AA_API_KEY not set: skipping data refresh."); process.exit(0); }
   const db = JSON.parse(readFileSync(file, "utf8"));
-  const rows = await fetchAll(key);
-  if (rows.length < 20) throw new Error(`Only ${rows.length} models returned: refusing to update.`);
+  const { rows, version } = await fetchAll(key);
   const { db: next, added, pending } = merge(db, rows, new Date().toISOString().slice(0, 19) + "Z");
+  const problem = sanityCheck(db, next, rows, version);
+  if (problem) { console.log(`REFUSED: ${problem}. Keeping the last good data.`); process.exit(0); }
   const changed = JSON.stringify(next.models) !== JSON.stringify(db.models);
   writeFileSync(file, JSON.stringify(changed ? next : db, null, 1) + "\n");
   console.log(`models from API: ${rows.length}; changed: ${changed}; added: ${added.join(", ") || "none"}`);

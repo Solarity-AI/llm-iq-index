@@ -40,13 +40,34 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
 
+      # A failed or refused refresh never blocks a deploy: the site keeps its last good data.
       - name: Refresh scores from Artificial Analysis
         id: update
+        continue-on-error: true
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
         run: |
-          npm run update --silent | tee update.log
+          set -o pipefail
+          npm run update --silent 2>&1 | tee update.log
           echo "pending=$(grep '^PENDING: ' update.log | sed 's/^PENDING: //')" >> "$GITHUB_OUTPUT"
+          echo "refused=$(grep '^REFUSED: ' update.log | sed 's/^REFUSED: //')" >> "$GITHUB_OUTPUT"
+
+      - name: Discard a partial refresh
+        if: steps.update.outcome == 'failure'
+        run: |
+          git checkout -- data/models.json
+          echo "::warning::Data refresh failed; deploying the last good data. $(tail -1 update.log)"
+
+      - name: Flag a refused or failed refresh
+        if: steps.update.outcome == 'failure' || steps.update.outputs.refused != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REASON: ${{ steps.update.outputs.refused || 'the refresh step failed; see the run log' }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Data refresh needs attention"
+          n=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+          if [ -z "$n" ]; then gh issue create --title "$title" --body "The scheduled data refresh did not update the site: ${REASON}. The site keeps showing the last good data. Run: ${RUN}"; fi
 
       - run: npm run build --silent
       - run: npm test
@@ -58,7 +79,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/models.json data.js index.html
           git commit -m "chore(data): refresh scores from Artificial Analysis"
-          git push
+          # Another merge may land meanwhile: rebase onto it and retry.
+          for i in 1 2 3; do git push && exit 0; git pull --rebase origin main || exit 1; done
+          exit 1
 
       - name: Flag models that need classifying
         if: steps.update.outputs.pending != ''
