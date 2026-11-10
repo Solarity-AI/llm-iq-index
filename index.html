@@ -77,6 +77,8 @@ tr.top3 .rank{color:var(--gold)}
 .barcell{width:28%;min-width:150px}
 .bar{height:4px;border-radius:2px;background:var(--track);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:2px}
+.sub{font-size:.72rem;color:var(--muted);display:block;margin-top:2px}
+.est{font:500 .6rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);border-radius:4px;padding:0 4px;cursor:help}
 .tested{font:500 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 5px;margin-left:8px;vertical-align:2px;cursor:help}
 .src a{font-size:.8rem;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent);margin-right:10px}
 .src a:hover{border-color:var(--gold)}
@@ -132,7 +134,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       </div>
     </div>
     <div class="board"><table>
-      <thead><tr><th>#</th><th>Model · thinking mode</th><th class="hide-sm">Type</th><th>IQ</th><th class="barcell hide-sm">100 — 145</th><th>AA idx</th><th>Sources</th></tr></thead>
+      <thead><tr><th>#</th><th>Model · thinking mode</th><th>Company</th><th class="hide-sm">Released</th><th>Params</th><th>IQ</th><th class="barcell hide-sm">100 — 145</th><th>AA idx</th><th>Sources</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
   </section>
@@ -154,6 +156,7 @@ footer{font:.75rem var(--mono);color:var(--muted);display:flex;flex-wrap:wrap;ga
       <li><b>Benchmark mapping.</b> Each thinking mode's Artificial Analysis Intelligence Index (v5, 0–100) converts to IQ with <code>IQ = 100 + 0.6 × index</code>. The factor puts the strongest modes where TrackingAI's offline test measures them, around 130–135.</li>
       <li><b>Direct IQ test.</b> Where TrackingAI tested that exact model and mode on its offline test, whose questions are never published, the final score averages the mapped number with the measured IQ. These rows carry a <span class="tested" style="margin:0">tested</span> mark; hover it for the raw results.</li>
       <li><b>Why not Mensa Norway.</b> Top models nearly max out the public Mensa Norway test (147–148) and may have seen its questions in training. It appears only in tooltips.</li>
+      <li><b>Release dates and sizes.</b> Release month and parameter counts come from each model's Artificial Analysis page. Open-weight labs publish their sizes (total, and active for mixture-of-experts models). Closed labs do not, so those sizes are marked <span class="est">est.</span>: rough tier estimates from each model's price and speed compared with open models of known size, accurate to a factor of about two at best.</li>
       <li><b>Read with care.</b> These are estimates of reasoning ability on an IQ-style scale, not psychometric IQ. Treat gaps of 2–3 points as noise. Kimi K3.1 Pro weights were announced but not yet released. Gemini 3.8 Flash's tested mode is matched to "high" as the closest fit.</li>
     </ol>
   </section>
