@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { splitName, classify, merge } from "../scripts/update-from-aa.mjs";
+import { splitName, classify, merge, fetchAll } from "../scripts/update-from-aa.mjs";
 import { pick } from "../scripts/pick.mjs";
 
 const row = (name, idx, creator = "Anthropic", date = "2026-11-01", slug = "x") =>
@@ -57,4 +57,23 @@ test("a new model appears the same day: classified ones are added, unknown ones 
 test("models without a benchmark score are ignored", () => {
   const { added } = merge(db(), [row("Unscored (max)", null)], "2026-11-11T00:00:00Z");
   assert.deepEqual(added, []);
+});
+
+test("a mode missing from today's list keeps its last score and TrackingAI result (#78)", () => {
+  const { db: out } = merge(db(), [row("Claude Opus 5.5 (high)", 60)], "2026-11-11T00:00:00Z");
+  const opus = out.models.find(m => m.name === "Claude Opus 5.5");
+  assert.deepEqual(opus.modes, [{ mode: "high", aa: 60 }, { mode: "max", aa: 59 }]);
+  assert.equal(opus.trackingai.max.offline, 134);
+});
+
+test("fetchAll reads up to 50 pages and refuses a list still cut off after them (#78)", async () => {
+  let pages = 0;
+  const fetchFn = async () => ({ ok: true, json: async () => { pages++; return { data: [], pagination: { has_more: pages < 50 } }; } });
+  const { rows } = await fetchAll("k", { fetchFn, sleep: async () => {} });
+  assert.deepEqual(rows, []);
+  assert.equal(pages, 50);
+  pages = 0;
+  const endless = async () => ({ ok: true, json: async () => { pages++; return { data: [], pagination: { has_more: true } }; } });
+  await assert.rejects(fetchAll("k", { fetchFn: endless, sleep: async () => {} }), /still has more pages/);
+  assert.equal(pages, 50);
 });
