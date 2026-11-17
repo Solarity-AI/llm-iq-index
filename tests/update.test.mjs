@@ -77,3 +77,13 @@ test("fetchAll reads up to 50 pages and refuses a list still cut off after them 
   await assert.rejects(fetchAll("k", { fetchFn: endless, sleep: async () => {} }), /still has more pages/);
   assert.equal(pages, 50);
 });
+
+test("merge lists each mode once, and a lone mode keeps its label when new modes appear (#80)", () => {
+  const now = "2026-11-11T00:00:00Z";
+  const { db: out } = merge(db(), [row("Kimi K3.1 Pro", 47, "Kimi"), row("Kimi K3.1 Pro (Non-reasoning)", 30, "Kimi")], now);
+  assert.deepEqual(out.models.find(m => m.name === "Kimi K3.1 Pro").modes, [{ mode: "thinking", aa: 47 }, { mode: "Non-reasoning", aa: 30 }]);
+  const { db: out2 } = merge(db(), [row("Claude Opus 5.5 (max)", 61), row("Claude Opus 5.5 (max)", 58)], now);
+  assert.deepEqual(out2.models.find(m => m.name === "Claude Opus 5.5").modes, [{ mode: "max", aa: 61 }]);
+  const { db: out3 } = merge(db(), [row("Claude Opus 6", 50), row("Claude Opus 6 (standard)", 49)], now);
+  assert.deepEqual(out3.models.find(m => m.name === "Claude Opus 6").modes, [{ mode: "standard", aa: 50 }]);
+});

@@ -54,6 +54,8 @@ function groupByBase(apiRows) {
 }
 const earliestMonth = entries => entries.map(e => e.date).filter(Boolean).sort()[0]?.slice(0, 7);
 const byScore = (a, b) => b.aa - a.aa;
+/** One entry per mode, the highest score kept: "Foo" and "Foo (standard)", or two "Foo (max)" rows, are one mode (#80). */
+const oneEach = modes => [...modes].sort(byScore).filter((x, i, all) => all.findIndex(y => y.mode === x.mode) === i);
 
 /** A model entry for a base name the database has not seen before. */
 function newModel(base, entries, now) {
@@ -61,7 +63,7 @@ function newModel(base, entries, now) {
     name: base, org: entries[0].creator || "Unknown", type: classify(base, entries[0].creator), aaNames: [base],
     aaSlug: entries.find(e => e.slug)?.slug || "", released: earliestMonth(entries) || now.slice(0, 7),
     params: { total: null, active: null, disclosed: false },
-    modes: entries.map(e => ({ mode: e.mode || "standard", aa: e.aa })).sort(byScore),
+    modes: oneEach(entries.map(e => ({ mode: e.mode || "standard", aa: e.aa }))),
     trackingai: {}, addedAt: now,
   };
 }
@@ -75,8 +77,11 @@ export function merge(db, apiRows, now) {
     const entries = m.aaNames.flatMap(n => (byBase.get(n) || []).map(e => ({ ...e, prefix: n === m.aaNames[0] ? "" : n.replace(m.aaNames[0], "").trim() })));
     m.aaNames.forEach(n => claimed.add(n));
     if (!entries.length) continue; // not listed today: keep last known values
-    const single = m.modes.length === 1 && entries.length === 1;
-    const listed = entries.map(e => ({ mode: single && !e.mode ? m.modes[0].mode : [e.prefix, e.mode || "standard"].filter(Boolean).join(" "), aa: e.aa }));
+    // A lone known mode keeps its label for the bare row, also when new modes appear next to it: "Kimi K3.1 Pro"
+    // stays "thinking" beside a new "(Non-reasoning)" instead of becoming "standard" next to a stale "thinking" (#80).
+    const lone = m.modes.length === 1 ? m.modes[0].mode : null;
+    const keepsLabel = e => lone && !e.mode && (entries.length === 1 || (!e.prefix && !entries.some(o => o.mode === lone)));
+    const listed = oneEach(entries.map(e => ({ mode: keepsLabel(e) ? lone : [e.prefix, e.mode || "standard"].filter(Boolean).join(" "), aa: e.aa })));
     // A mode missing from today's list keeps its last known score, like a missing model (#78):
     // dropping it would also drop its TrackingAI result from the leaderboard.
     const seen = new Set(listed.map(x => x.mode));
