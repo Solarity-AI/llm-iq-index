@@ -76,8 +76,11 @@ export function merge(db, apiRows, now) {
     m.aaNames.forEach(n => claimed.add(n));
     if (!entries.length) continue; // not listed today: keep last known values
     const single = m.modes.length === 1 && entries.length === 1;
-    m.modes = entries.map(e => ({ mode: single && !e.mode ? m.modes[0].mode : [e.prefix, e.mode || "standard"].filter(Boolean).join(" "), aa: e.aa }))
-      .sort(byScore);
+    const listed = entries.map(e => ({ mode: single && !e.mode ? m.modes[0].mode : [e.prefix, e.mode || "standard"].filter(Boolean).join(" "), aa: e.aa }));
+    // A mode missing from today's list keeps its last known score, like a missing model (#78):
+    // dropping it would also drop its TrackingAI result from the leaderboard.
+    const seen = new Set(listed.map(x => x.mode));
+    m.modes = [...listed, ...m.modes.filter(x => !seen.has(x.mode))].sort(byScore);
     m.released = earliestMonth(entries) || m.released;
   }
   const added = [], pending = [];
@@ -107,14 +110,15 @@ async function fetchPage(key, page, fetchFn, sleep) {
 export async function fetchAll(key, { fetchFn = fetch, sleep = ms => new Promise(r => setTimeout(r, ms)) } = {}) {
   const rows = [];
   let version = null;
-  for (let page = 1; page < MAX_PAGES; page++) {
+  for (let page = 1; page <= MAX_PAGES; page++) {
     const body = await fetchPage(key, page, fetchFn, sleep);
     if (!Array.isArray(body.data)) throw new Error(`Unexpected response shape on page ${page}`);
     version ??= body.intelligence_index_version ?? null;
     rows.push(...body.data);
-    if (!body.pagination?.has_more) break;
+    if (!body.pagination?.has_more) return { rows, version };
   }
-  return { rows, version };
+  // A cut-off list would be merged as if complete (#78).
+  throw new Error(`Artificial Analysis API still has more pages after ${MAX_PAGES}; refusing a partial list`);
 }
 
 /**
