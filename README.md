@@ -37,3 +37,7 @@ Requires Node 22 or later (see `.nvmrc`); no dependencies to install.
 After editing `data/models.json`, run `npm run build` and commit the regenerated files.
 
 Data: Artificial Analysis (attribution required by their API terms) and TrackingAI.
+
+## License
+
+© Solarity AI LLC. All rights reserved. See [LICENSE](LICENSE).
