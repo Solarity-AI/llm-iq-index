@@ -1,0 +1,29 @@
+# Tests on every pull request that touches code or data: npm run check (build, node --test, generated files committed).
+# Org rules: pull_request and workflow_dispatch only. Hosted runner on purpose: this repo is public, the org's
+# self-hosted runners do not take public-repo jobs, and fork pull requests must not run on owner machines.
+name: CI
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**/*.md"
+      - "LICENSE"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc }
+      - run: npm run check
