@@ -1,30 +1,17 @@
 name: Site
 
+# Refreshes scores from Artificial Analysis, commits them and deploys the site to GitHub Pages. Manual runs only
+# (Actions > Site > Run workflow, or gh workflow run site.yml); the old 3-hourly schedule and push trigger were removed
+# under the org CI rules. Pull request tests live in ci.yml.
 on:
-  push:
-    branches: [main]
-  pull_request:
-  schedule:
-    - cron: "17 */3 * * *" # every 3 hours: new models show up the same day
   workflow_dispatch:
 
 concurrency:
-  group: site-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  group: site-main
   cancel-in-progress: false
 
 jobs:
-  test:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version-file: .nvmrc }
-      - run: npm run check
-
   refresh-and-deploy:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

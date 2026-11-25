@@ -1,0 +1,29 @@
+name: Task or bug
+description: A piece of work, a bug, or a wrong or missing model score. Title starts with a verb.
+title: "Fix "
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What and why
+      description: For a score, the model and mode, what the site shows and the source (Artificial Analysis or TrackingAI link).
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: 1 line per condition that must hold when this is done.
+      placeholder: |
+        - The model shows IQ 142 in the open-weight table.
+    validations:
+      required: true
+  - type: textarea
+    id: verify
+    attributes:
+      label: How to verify
+      description: The command to run and its result, or the manual steps and what you should see.
+      placeholder: |
+        npm run check  ->  all tests pass, no generated-file diff
+    validations:
+      required: true

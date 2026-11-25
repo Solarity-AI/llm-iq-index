@@ -12,7 +12,7 @@ One IQ-style number for each of the 10 strongest closed and 10 strongest open-we
 
 ## How it stays current
 
-The `Site` workflow (`.github/workflows/site.yml`) runs every 3 hours, on every push to `main`, and on demand:
+The `Site` workflow (`.github/workflows/site.yml`) runs on demand (Actions → Site → Run workflow, or `gh workflow run site.yml`):
 
 1. `npm run update` pulls every model and mode from the Artificial Analysis free Data API and merges it into `data/models.json`. New models are classified open or closed by the rules in `scripts/update-from-aa.mjs`; any it can't classify are held back and listed in a GitHub issue.
 2. `npm run build` regenerates `data.js` (the top 10 of each kind) and stamps cache-busting versions on the page's assets.
@@ -31,7 +31,7 @@ Requires Node 22 or later (see `.nvmrc`); no dependencies to install.
 | `npm start` | Serves the site at http://localhost:8080 (set `PORT` to change it) |
 | `npm test` | Runs the test suite |
 | `npm run build` | Regenerates `data.js` from `data/models.json` and stamps asset versions |
-| `npm run check` | What CI runs: build, tests, and a check that generated files are committed |
+| `npm run check` | The verify command; CI (`ci.yml`) runs it on every pull request: build, tests, and a check that generated files are committed |
 | `npm run update` | Refreshes scores from Artificial Analysis (needs `AA_API_KEY`) |
 
 After editing `data/models.json`, run `npm run build` and commit the regenerated files.
