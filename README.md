@@ -1,8 +1,22 @@
 # LLM IQ Index
 
+[![LLM IQ Index: one IQ-style number for every frontier model and every thinking mode, with sources](og.png)](https://solarity-ai.github.io/llm-iq-index/)
+
 One IQ-style number for each of the 10 strongest closed and 10 strongest open-weight language models, for every thinking mode they offer.
 
 **Live site:** https://solarity-ai.github.io/llm-iq-index/
+
+## Top 3 today
+
+From the data refreshed on 2026-11-10 (the live site always shows the latest):
+
+| # | Model | Best mode | IQ |
+| --- | --- | --- | --- |
+| 1 | Claude Fable 5.2 (Anthropic) | max | 139 |
+| 2 | Gemini 4 Carbon (Google) | high | 136 |
+| 3 | Claude Opus 5.5 (Anthropic) | max | 135 |
+
+Strongest open-weight model: Kimi K3.1 Pro (Moonshot), thinking mode, IQ 128.
 
 ## How scores are made
 
@@ -16,7 +30,7 @@ The `Site` workflow (`.github/workflows/site.yml`) runs on demand (Actions → S
 
 1. `npm run update` pulls every model and mode from the Artificial Analysis free Data API and merges it into `data/models.json`. New models are classified open or closed by the rules in `scripts/update-from-aa.mjs`; any it can't classify are held back and listed in a GitHub issue.
 2. `npm run build` regenerates `data.js` (the top 10 of each kind) and stamps cache-busting versions on the page's assets.
-3. `npm test` must pass; changes are committed and the site is deployed to GitHub Pages.
+3. `npm test` must pass; the workflow pushes the changes to a `data/refresh-<run id>` branch, opens a pull request and squash-merges it, then deploys the site to GitHub Pages. While the org setting that lets GitHub Actions open pull requests is off, it pushes to `main` directly instead.
 
 The refresh needs a free Artificial Analysis API key stored as the repository secret `AA_API_KEY` (Settings → Secrets and variables → Actions). Without it the workflow still tests and deploys, but scores stay as last committed.
 
@@ -40,4 +54,4 @@ Data: Artificial Analysis (attribution required by their API terms) and Tracking
 
 ## License
 
-© Solarity AI LLC. All rights reserved. See [LICENSE](LICENSE).
+Free to use, personally or inside your organization, under the [Solarity AI Use License](LICENSE). Selling, redistributing or publishing modified versions needs written permission from Solarity AI LLC. The scores come from Artificial Analysis and TrackingAI under their own terms.

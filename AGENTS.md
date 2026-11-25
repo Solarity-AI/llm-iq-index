@@ -24,7 +24,8 @@ scores into `data/models.json`; models it cannot classify are held back as `pend
 - Never hand-edit `data.js` or the version stamps in `index.html`: edit `data/models.json` or the scripts, then run
   `npm run build` and commit the regenerated files.
 - Do not run `npm run update` and never read or print `AA_API_KEY`: the refresh runs only in the `Site` workflow.
-- The `Site` workflow (refresh, commit to `main`, deploy to GitHub Pages) runs only on demand; do not dispatch it.
+- The `Site` workflow (refresh, land the data on `main` through a pull request it opens and merges, deploy to GitHub
+  Pages) runs only on demand; do not dispatch it.
 - Artificial Analysis attribution stays on the page (their API terms).
 
 ## Shipping
