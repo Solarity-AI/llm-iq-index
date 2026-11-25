@@ -1,0 +1,19 @@
+# Weekly grouped update pull requests for the GitHub Actions in the workflows and for npm (package.json has no
+# dependencies today, so npm stays quiet until one is added).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: ci
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
